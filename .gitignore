@@ -1,3 +1,5 @@
 .vs/
 TodoApi/bin/
 TodoApi/obj/
+/GymLogger.Shared/bin/Debug/net6.0
+/GymLogger.Shared/obj

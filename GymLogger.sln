@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32526.322
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TodoApi", "TodoApi\TodoApi.csproj", "{0EA823EE-FAC1-49D8-98FE-1790487842B7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GymLogger.API", "TodoApi\GymLogger.API.csproj", "{0EA823EE-FAC1-49D8-98FE-1790487842B7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GymLogger.Shared", "GymLogger.Shared\GymLogger.Shared.csproj", "{6D29BD94-1B5E-481E-9425-72DF9E953563}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{0EA823EE-FAC1-49D8-98FE-1790487842B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0EA823EE-FAC1-49D8-98FE-1790487842B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0EA823EE-FAC1-49D8-98FE-1790487842B7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D29BD94-1B5E-481E-9425-72DF9E953563}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D29BD94-1B5E-481E-9425-72DF9E953563}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D29BD94-1B5E-481E-9425-72DF9E953563}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D29BD94-1B5E-481E-9425-72DF9E953563}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
