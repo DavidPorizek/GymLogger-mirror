@@ -30,18 +30,22 @@ public class UserController : ControllerBase
             return NotFound();
         }
 
-        return await _context.Users.ToListAsync();
+        return await _context.Users
+            .Include(x => x.Configuration)
+            .ToListAsync();
     }
 
     // GET: api/Users/5
     [HttpGet("{id}")]
-    public async Task<ActionResult<User>> GetUser(Guid id)
+    public async Task<ActionResult<User>> GetUser(long id)
     {
         if (_context.Users == null)
         {
             return NotFound();
         }
-        var User = await _context.Users.FindAsync(id);
+        var User = await _context.Users
+            .Include(x => x.Configuration)
+            .SingleOrDefaultAsync(x => x.Id == id);
 
         if (User == null)
         {
@@ -54,7 +58,7 @@ public class UserController : ControllerBase
     // PUT: api/Users/5
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateUser(Guid id, User User)
+    public async Task<IActionResult> UpdateUser(long id, User User)
     {
         if (id != User.Id)
         {
@@ -68,6 +72,7 @@ public class UserController : ControllerBase
         }
 
         updateUser.Name = User.Name;
+        updateUser.ConfigurationId = User.ConfigurationId;
 
         try
         {
@@ -100,11 +105,14 @@ public class UserController : ControllerBase
 
         var createdUser = new User
         {
-            Name = User.Name
+            Name = User.Name,
+            ConfigurationId = User.ConfigurationId
         };
 
         _context.Users.Add(createdUser);
         await _context.SaveChangesAsync();
+
+        _context.Entry(createdUser).Reference(x => x.Configuration).Load();
 
         return CreatedAtAction(nameof(GetUser), new { id = createdUser.Id }, createdUser);
     }
@@ -130,7 +138,7 @@ public class UserController : ControllerBase
         return NoContent();
     }
 
-    private bool UserExists(Guid id)
+    private bool UserExists(long id)
     {
         return (_context.Users?.Any(e => e.Id == id)).GetValueOrDefault();
     }

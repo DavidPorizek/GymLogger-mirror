@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using GymLogger.Shared.Models;
 
+
 namespace GymLogger.Context;
 
 public class GymLoggerContext : DbContext
@@ -10,7 +11,7 @@ public class GymLoggerContext : DbContext
     {
     }
 
-    public DbSet<Log> Logs => Set<Log>();
+    public DbSet<ExcerciseLog> ExcerciseLogs => Set<ExcerciseLog>();
     public DbSet<Workout> Workouts => Set<Workout>();
     public DbSet<WorkoutLog> WorkoutLogs => Set<WorkoutLog>();
     public DbSet<User> Users => Set<User>();
@@ -19,5 +20,14 @@ public class GymLoggerContext : DbContext
     public DbSet<Excercise> Excercises => Set<Excercise>();
     public DbSet<Combination> Combinations => Set<Combination>();
 
-    //public DbSet<TodoItem> TodoItems { get; set; } = null!;
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
+        {
+            relationship.DeleteBehavior = DeleteBehavior.Restrict;
+        }
+
+        base.OnModelCreating(modelBuilder);
+    }
+
 }

@@ -30,7 +30,10 @@ public class WorkoutLogController : ControllerBase
             return NotFound();
         }
 
-        return await _context.WorkoutLogs.ToListAsync();
+        return await _context.WorkoutLogs
+            .Include(x => x.Workout)
+            .Include(x => x.User)
+            .ToListAsync();
     }
 
     // GET: api/WorkoutLogs/5
@@ -41,7 +44,10 @@ public class WorkoutLogController : ControllerBase
         {
             return NotFound();
         }
-        var workoutLog = await _context.WorkoutLogs.FindAsync(id);
+        var workoutLog = await _context.WorkoutLogs
+            .Include(x => x.Workout)
+            .Include(x => x.User)
+            .SingleOrDefaultAsync(x => x.Id == id);
 
         if (workoutLog == null)
         {
@@ -69,8 +75,8 @@ public class WorkoutLogController : ControllerBase
 
         updateWorkoutLog.Duration = workoutLog.Duration;
         updateWorkoutLog.Date = workoutLog.Date;
-        updateWorkoutLog.Logs = workoutLog.Logs;
-        updateWorkoutLog.Workout = workoutLog.Workout;
+        updateWorkoutLog.WorkoutId = workoutLog.WorkoutId;
+        updateWorkoutLog.UserId = workoutLog.UserId;
 
         try
         {
@@ -105,12 +111,14 @@ public class WorkoutLogController : ControllerBase
         {
             Date = workoutLog.Date,
             Duration = workoutLog.Duration,
-            Workout = workoutLog.Workout,
-            Logs = workoutLog.Logs
+            Workout = workoutLog.Workout
         };
 
         _context.WorkoutLogs.Add(createdWorkoutLog);
         await _context.SaveChangesAsync();
+
+        _context.Entry(createdWorkoutLog).Reference(x => x.User).Load();
+        _context.Entry(createdWorkoutLog).Reference(x => x.Workout).Load();
 
         return CreatedAtAction(nameof(GetWorkoutLog), new { id = createdWorkoutLog.Id }, createdWorkoutLog);
     }

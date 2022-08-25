@@ -10,7 +10,4 @@ public class Equipment
     public int DumbbellMin { get; set; }
     public int DumbbellMax { get; set; }
     public int DumbbellIncrements { get; set; }
-
-    public virtual Combination Combination { get; set; }
-
 }

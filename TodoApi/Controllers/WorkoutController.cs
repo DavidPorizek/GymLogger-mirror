@@ -68,8 +68,6 @@ public class WorkoutController : ControllerBase
         }
 
         updateWorkout.Name = Workout.Name;
-        updateWorkout.Configuration = Workout.Configuration;
-        updateWorkout.Combinations = Workout.Combinations;
 
         try
         {
@@ -102,29 +100,11 @@ public class WorkoutController : ControllerBase
 
         var createdWorkout = new Workout
         {
-            Name = Workout.Name,
-            Configuration = Workout.Configuration,
-            Combinations = Workout.Combinations
+            Name = Workout.Name
         };
 
         _context.Workouts.Add(createdWorkout);
         await _context.SaveChangesAsync();
-
-        //var configuration = await _context.Configurations.FindAsync(Workout.Configuration.Id);
-        //if (configuration == null)
-        //{
-        //    return NotFound();
-        //}
-
-        //createdWorkout.Configuration = configuration;
-
-        //var combinations = _context.Combinations.Where(c => createdWorkout.CombinationsIds.All(c2 => c.Id == c2)).ToList();
-        //if (combinations == null)
-        //{
-        //    return NotFound();
-        //}
-
-        //createdWorkout.Combinations = combinations;
 
         return CreatedAtAction(nameof(GetWorkout), new { id = createdWorkout.Id }, createdWorkout);
     }

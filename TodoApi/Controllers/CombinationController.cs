@@ -30,7 +30,11 @@ public class CombinationController : ControllerBase
             return NotFound();
         }
 
-        return await _context.Combinations.ToListAsync();
+        return await _context.Combinations
+            .Include(e => e.Equipment)
+            .Include(w => w.Workout)
+            .Include(e => e.Excercise)
+            .ToListAsync();
     }
 
     // GET: api/Combinations/5
@@ -41,7 +45,12 @@ public class CombinationController : ControllerBase
         {
             return NotFound();
         }
-        var Combination = await _context.Combinations.FindAsync(id);
+
+        var Combination = await _context.Combinations
+            .Include(x => x.Equipment)
+            .Include(x => x.Workout)
+            //.Include(x => x.Excercise)
+            .SingleOrDefaultAsync(x => x.Id == id);
 
         if (Combination == null)
         {
@@ -67,8 +76,9 @@ public class CombinationController : ControllerBase
             return NotFound();
         }
 
-        updateCombination.Equipment = Combination.Equipment;
-        updateCombination.Excercise = Combination.Excercise;
+        updateCombination.EquipmentId = Combination.EquipmentId;
+        updateCombination.ExcerciseId = Combination.ExcerciseId;
+        updateCombination.WorkoutId = Combination.WorkoutId;
 
         try
         {
@@ -101,28 +111,17 @@ public class CombinationController : ControllerBase
 
         var createdCombination = new Combination
         {
-            Equipment = Combination.Equipment,
-            Excercise = Combination.Excercise
+            EquipmentId = Combination.EquipmentId,
+            ExcerciseId = Combination.ExcerciseId,
+            WorkoutId = Combination.WorkoutId
         };
-
-        //var equipment = await _context.Equipments.FindAsync(createdCombination.Equipment);
-        //if (equipment == null)
-        //{
-        //    return NotFound();
-        //}
-
-        //createdCombination.Equipment = equipment;
-
-        //var excercise = await _context.Excercises.FindAsync(createdCombination.Excercise);
-        //if (excercise == null)
-        //{
-        //    return NotFound();
-        //}
-
-        //createdCombination.Excercise = excercise;
 
         _context.Combinations.Add(createdCombination);
         await _context.SaveChangesAsync();
+
+        _context.Entry(createdCombination).Reference(x => x.Equipment).Load();
+        _context.Entry(createdCombination).Reference(x => x.Workout).Load();
+        _context.Entry(createdCombination).Reference(x => x.Excercise).Load();
 
         return CreatedAtAction(nameof(GetCombination), new { id = createdCombination.Id }, createdCombination);
     }
@@ -147,7 +146,6 @@ public class CombinationController : ControllerBase
 
         return NoContent();
     }
-
     private bool CombinationExists(long id)
     {
         return (_context.Combinations?.Any(e => e.Id == id)).GetValueOrDefault();

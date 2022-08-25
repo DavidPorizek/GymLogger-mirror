@@ -1,0 +1,66 @@
+﻿@page "/equipments"
+@inject Data.ApiService apiService
+@using GymLogger.Shared.Models
+
+<h3>Equipment</h3>
+
+@if (equipments == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <EditForm Model="@equipmentModel" OnValidSubmit="@HandleValidSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <InputText id="name" @bind-Value="equipmentModel.Name" />
+
+        <button type="submit">Submit</button>
+    </EditForm>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Barbell Minimum</th>
+                <th>Barbell Maximum</th>
+                <th>Barbell Increments</th>
+                <th>Dumbbell Minimum</th>
+                <th>Dumbbell Maximum</th>
+                <th>Dumbbell Increments</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var equipment in equipments)
+            {
+                <tr>
+                    <td>@equipment.Id</td>
+                    <td>@equipment.Name</td>
+                    <td>@equipment.BarbellMin</td>
+                    <td>@equipment.BarbellMax</td>
+                    <td>@equipment.BarbellIncrements</td>
+                    <td>@equipment.DumbbellMin</td>
+                    <td>@equipment.DumbbellMax</td>
+                    <td>@equipment.DumbbellIncrements</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private Equipment equipmentModel = new();
+    List<Equipment> equipments;
+
+    protected override async Task OnInitializedAsync()
+    {
+        equipments = await apiService.GetEquipmentsAsync();
+    }
+
+    private void HandleValidSubmit()
+    {
+        apiService.CreateEquipmentsAsync(equipmentModel);
+    }
+}

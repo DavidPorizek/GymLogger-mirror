@@ -30,7 +30,9 @@ public class ConfigurationController : ControllerBase
             return NotFound();
         }
 
-        return await _context.Configurations.ToListAsync();
+        return await _context.Configurations
+            .Include(x => x.Workout)
+            .ToListAsync();
     }
 
     // GET: api/Configurations/5
@@ -41,7 +43,9 @@ public class ConfigurationController : ControllerBase
         {
             return NotFound();
         }
-        var Configuration = await _context.Configurations.FindAsync(id);
+        var Configuration = await _context.Configurations
+            .Include(x => x.Workout)
+            .SingleOrDefaultAsync(x => x.Id == id);
 
         if (Configuration == null)
         {
@@ -67,7 +71,6 @@ public class ConfigurationController : ControllerBase
             return NotFound();
         }
 
-        updateConfiguration.User = Configuration.User;
         updateConfiguration.IncrementAutomatically = Configuration.IncrementAutomatically;
         updateConfiguration.DeloadAutomatically = Configuration.DeloadAutomatically;
         updateConfiguration.IncrementWholeWorkout = Configuration.IncrementWholeWorkout;
@@ -76,6 +79,7 @@ public class ConfigurationController : ControllerBase
         updateConfiguration.DeloadByPercentage = Configuration.DeloadByPercentage;
         updateConfiguration.DeloadRatio = Configuration.DeloadRatio;
         updateConfiguration.IncrementRatio = Configuration.IncrementRatio;
+        updateConfiguration.WorkoutId = Configuration.WorkoutId;
 
         try
         {
@@ -108,7 +112,6 @@ public class ConfigurationController : ControllerBase
 
         var createdConfiguration = new Configuration
         {
-            User = Configuration.User,
             IncrementAutomatically = Configuration.IncrementAutomatically,
             DeloadAutomatically = Configuration.DeloadAutomatically,
             IncrementWholeWorkout = Configuration.IncrementWholeWorkout,
@@ -116,20 +119,14 @@ public class ConfigurationController : ControllerBase
             IncrementByPercentage = Configuration.IncrementByPercentage,
             DeloadByPercentage = Configuration.DeloadByPercentage,
             DeloadRatio = Configuration.DeloadRatio,
-            IncrementRatio = Configuration.IncrementRatio
+            IncrementRatio = Configuration.IncrementRatio,
+            WorkoutId = Configuration.WorkoutId
         };
-
-
-        //var user = await _context.Users.FindAsync(createdConfiguration.UserId);
-        //if (user == null)
-        //{
-        //    return NotFound();
-        //}
-
-        //createdConfiguration.User = user;
 
         _context.Configurations.Add(createdConfiguration);
         await _context.SaveChangesAsync();
+
+        _context.Entry(createdConfiguration).Reference(x => x.Workout).Load();
 
         return CreatedAtAction(nameof(GetConfiguration), new { id = createdConfiguration.Id }, createdConfiguration);
     }

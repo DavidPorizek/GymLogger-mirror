@@ -10,7 +10,7 @@ using GymLogger.Context;
 
 namespace GymLogger.Controllers;
 
-[Route("api/Logs")]
+[Route("api/ExcerciseLogs")]
 [ApiController]
 public class LogController : ControllerBase
 {
@@ -21,56 +21,64 @@ public class LogController : ControllerBase
         _context = context;
     }
 
-    // GET: api/Logs
+    // GET: api/ExcerciseLogs
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Log>>> GetLogs()
+    public async Task<ActionResult<IEnumerable<ExcerciseLog>>> GetLogs()
     {
-        if (_context.Logs == null)
+        if (_context.ExcerciseLogs == null)
         {
             return NotFound();
         }
 
-        return await _context.Logs.ToListAsync();
+        return await _context.ExcerciseLogs
+            .Include(x => x.WorkoutLog)
+            .Include(x => x.Excercise)
+            .ToListAsync();
     }
 
-    // GET: api/Logs/5
+    // GET: api/ExcerciseLogs/5
     [HttpGet("{id}")]
-    public async Task<ActionResult<Log>> GetLog(long id)
+    public async Task<ActionResult<ExcerciseLog>> GetLog(long id)
     {
-        if (_context.Logs == null)
+        if (_context.ExcerciseLogs == null)
         {
             return NotFound();
         }
-        var Log = await _context.Logs.FindAsync(id);
+        var ExcerciseLog = await _context.ExcerciseLogs
+            .Include(x => x.WorkoutLog)
+            .Include(x => x.Excercise)
+            .SingleOrDefaultAsync(x => x.Id == id);
 
-        if (Log == null)
+        if (ExcerciseLog == null)
         {
             return NotFound();
         }
 
-        return Log;
+        return ExcerciseLog;
     }
 
-    // PUT: api/Logs/5
+    // PUT: api/ExcerciseLogs/5
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateLog(long id, Log Log)
+    public async Task<IActionResult> UpdateLog(long id, ExcerciseLog ExcerciseLog)
     {
-        if (id != Log.Id)
+        if (id != ExcerciseLog.Id)
         {
             return BadRequest();
         }
 
-        var updateLog = await _context.Logs.FindAsync(id);
+        var updateLog = await _context.ExcerciseLogs.FindAsync(id);
         if (updateLog == null)
         {
             return NotFound();
         }
 
-        updateLog.Excercise = Log.Excercise;
-        updateLog.Repetition = Log.Repetition;
-        updateLog.Series = Log.Series;
-        updateLog.Completion = Log.Completion;
+        updateLog.Excercise = ExcerciseLog.Excercise;
+        updateLog.Repetition = ExcerciseLog.Repetition;
+        updateLog.Series = ExcerciseLog.Series;
+        updateLog.Completion = ExcerciseLog.Completion;
+        updateLog.WorkoutLogId = ExcerciseLog.WorkoutLogId;
+        updateLog.ExcerciseId = ExcerciseLog.ExcerciseId;
 
         try
         {
@@ -91,46 +99,51 @@ public class LogController : ControllerBase
         return NoContent();
     }
 
-    // POST: api/Logs
+    // POST: api/ExcerciseLogs
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPost]
-    public async Task<ActionResult<Log>> CreateLog(Log Log)
+    public async Task<ActionResult<ExcerciseLog>> CreateLog(ExcerciseLog ExcerciseLog)
     {
-        if (_context.Logs == null)
+        if (_context.ExcerciseLogs == null)
         {
-            return Problem("Entity set 'GymLoggerContext.Logs'  is null.");
+            return Problem("Entity set 'GymLoggerContext.ExcerciseLogs'  is null.");
         }
 
-        var createdLog = new Log
+        var createdLog = new ExcerciseLog
         {
-            Excercise = Log.Excercise,
-            Repetition = Log.Repetition,
-            Series = Log.Series,
-            Completion = Log.Completion
+            Excercise = ExcerciseLog.Excercise,
+            Repetition = ExcerciseLog.Repetition,
+            Series = ExcerciseLog.Series,
+            Completion = ExcerciseLog.Completion,
+            WorkoutLogId = ExcerciseLog.WorkoutLogId,
+            ExcerciseId = ExcerciseLog.ExcerciseId
         };
 
-        _context.Logs.Add(createdLog);
+        _context.ExcerciseLogs.Add(createdLog);
         await _context.SaveChangesAsync();
+
+        _context.Entry(createdLog).Reference(x => x.WorkoutLog).Load();
+        _context.Entry(createdLog).Reference(x => x.Excercise).Load();
 
         return CreatedAtAction(nameof(GetLog), new { id = createdLog.Id }, createdLog);
     }
 
-    // DELETE: api/Logs/5
+    // DELETE: api/ExcerciseLogs/5
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteTodoItem(long id)
     {
-        if (_context.Logs == null)
+        if (_context.ExcerciseLogs == null)
         {
             return NotFound();
         }
 
-        var todoItemDTO = await _context.Logs.FindAsync(id);
+        var todoItemDTO = await _context.ExcerciseLogs.FindAsync(id);
         if (todoItemDTO == null)
         {
             return NotFound();
         }
 
-        _context.Logs.Remove(todoItemDTO);
+        _context.ExcerciseLogs.Remove(todoItemDTO);
         await _context.SaveChangesAsync();
 
         return NoContent();
@@ -138,6 +151,6 @@ public class LogController : ControllerBase
 
     private bool LogExists(long id)
     {
-        return (_context.Logs?.Any(e => e.Id == id)).GetValueOrDefault();
+        return (_context.ExcerciseLogs?.Any(e => e.Id == id)).GetValueOrDefault();
     }
 }

@@ -2,9 +2,8 @@
 
 public class User
 {
-    public Guid Id { get; set; }
+    public long Id { get; set; }
     public string Name { get; set; }
-    public virtual Configuration Configuration { get; set; }
-    public virtual WorkoutLog WorkoutLog { get; set; }
-
+    public long ConfigurationId { get; set; }
+    public virtual Configuration? Configuration { get; set; }
 }
