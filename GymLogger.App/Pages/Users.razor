@@ -1,0 +1,65 @@
+﻿@page "/users"
+@inject Data.ApiService apiService
+@using GymLogger.Shared.Models
+
+<h3>Users</h3>
+
+@if (users == null || configurations == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <EditForm Model="@userModel" OnValidSubmit="@HandleValidSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <InputText id="name" @bind-Value="userModel.Name" />
+        <InputSelect id="ConfigurationId" @bind-Value="userModel.ConfigurationId">
+            @foreach (var configuration in configurations)
+            {
+                <option value="@configuration.Id">@configuration.Id</option>
+            }
+        </InputSelect>
+
+
+        <button type="submit">Submit</button>
+    </EditForm>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>ConfigurationId</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in users)
+            {
+                <tr>
+                    <td>@user.Id</td>
+                    <td>@user.Name</td>
+                    <td>@user.ConfigurationId</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private User userModel = new();
+    List<User>? users;
+    List<Configuration>? configurations;
+
+    protected override async Task OnInitializedAsync()
+    {
+        users = await apiService.GetUsersAsync();
+        configurations = await apiService.GetConfigurationsAsync();
+    }
+
+    private async void HandleValidSubmit()
+    {
+        await apiService.CreateUserAsync(userModel);
+    }
+}

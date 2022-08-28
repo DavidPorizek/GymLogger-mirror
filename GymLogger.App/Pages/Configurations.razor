@@ -1,0 +1,85 @@
+﻿@page "/configurations"
+@inject Data.ApiService apiService
+@using GymLogger.Shared.Models
+
+<h3>Configurations</h3>
+
+@if (workouts == null || configurations == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <EditForm Model="@configurationModel" OnValidSubmit="@HandleValidSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <InputCheckbox id="name" @bind-Value="configurationModel.IncrementAutomatically" />
+        <InputCheckbox id="barbellmin" @bind-Value="configurationModel.DeloadAutomatically" />
+        <InputCheckbox id="BarbellMax" @bind-Value="configurationModel.IncrementWholeWorkout" />
+        <InputCheckbox id="BarbellIncrements" @bind-Value="configurationModel.DeloadWholeWorkout" />
+        <InputCheckbox id="DumbbellMin" @bind-Value="configurationModel.IncrementByPercentage" />
+        <InputCheckbox id="DumbbellMax" @bind-Value="configurationModel.DeloadByPercentage" />
+        <InputNumber id="DumbbellIncrements" @bind-Value="configurationModel.DeloadRatio" />
+        <InputNumber id="DumbbellIncrements" @bind-Value="configurationModel.IncrementRatio" />
+        <InputSelect id="WorkoutId" @bind-Value="configurationModel.WorkoutId" >
+            @foreach (var workout in workouts)
+            {
+                <option value="@workout.Id">@workout.Name</option>
+            }
+        </InputSelect>
+
+
+        <button type="submit">Submit</button>
+    </EditForm>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>IncrementAutomatically</th>
+                <th>DeloadAutomatically</th>
+                <th>IncrementWholeWorkout</th>
+                <th>DeloadWholeWorkout</th>
+                <th>IncrementByPercentage</th>
+                <th>DeloadByPercentage</th>
+                <th>DeloadRatio</th>
+                <th>IncrementRatio</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var configuration in configurations)
+            {
+                <tr>
+                    <td>@configuration.Id</td>
+                    <td>@configuration.IncrementAutomatically</td>
+                    <td>@configuration.DeloadAutomatically </td>
+                    <td>@configuration.IncrementWholeWorkout </td>
+                    <td>@configuration.DeloadWholeWorkout </td>
+                    <td>@configuration.IncrementByPercentage </td>
+                    <td>@configuration.DeloadByPercentage </td>
+                    <td>@configuration.DeloadRatio </td>
+                    <td>@configuration.IncrementRatio  </td>
+                    <td>@configuration.WorkoutId  </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private Configuration configurationModel = new();
+    List<Configuration>? configurations;
+    List<Workout>? workouts;
+
+    protected override async Task OnInitializedAsync()
+    {
+        configurations = await apiService.GetConfigurationsAsync();
+        workouts = await apiService.GetWorkoutsAsync();
+    }
+
+    private async void HandleValidSubmit()
+    {
+        await apiService.CreateConfigurationAsync(configurationModel);
+    }
+}

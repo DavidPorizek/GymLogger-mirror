@@ -1,0 +1,82 @@
+﻿@page "/combinations"
+@inject Data.ApiService apiService
+@using GymLogger.Shared.Models
+
+<h3>Combinations</h3>
+
+@if (combinations == null || workouts == null || equipments == null || excercises == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <EditForm Model="@combinationModel" OnValidSubmit="@HandleValidSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <InputSelect id="WorkoutId" @bind-Value="combinationModel.WorkoutId">
+            @foreach (var workout in workouts)
+            {
+                <option value="@workout.Id">@workout.Name</option>
+            }
+        </InputSelect>
+        <InputSelect id="EquipmentId" @bind-Value="combinationModel.EquipmentId">
+            @foreach (var equipment in equipments)
+            {
+                <option value="@equipment.Id">@equipment.Name</option>
+            }
+        </InputSelect>
+        <InputSelect id="ExcerciseId" @bind-Value="combinationModel.ExcerciseId">
+            @foreach (var excercise in excercises)
+            {
+                <option value="@excercise.Id">@excercise.Name</option>
+            }
+        </InputSelect>
+
+
+        <button type="submit">Submit</button>
+    </EditForm>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>WorkoutId</th>
+                <th>EquipmentId</th>
+                <th>ExcerciseId</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var combination in combinations)
+            {
+                <tr>
+                    <td>@combination.Id</td>
+                    <td>@combination.WorkoutId</td>
+                    <td>@combination.EquipmentId</td>
+                    <td>@combination.ExcerciseId</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private Combination combinationModel = new();
+    List<Combination>? combinations;
+    List<Workout>? workouts;
+    List<Equipment>? equipments;
+    List<Excercise>? excercises;
+
+    protected override async Task OnInitializedAsync()
+    {
+        combinations = await apiService.GetCombinationsAsync();
+        workouts = await apiService.GetWorkoutsAsync();
+        equipments = await apiService.GetEquipmentsAsync();
+        excercises = await apiService.GetExcercisesAsync();
+    }
+
+    private async void HandleValidSubmit()
+    {
+        await apiService.CreateCombinationAsync(combinationModel);
+    }
+}

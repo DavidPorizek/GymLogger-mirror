@@ -1,0 +1,80 @@
+﻿@page "/workoutlogs"
+@inject Data.ApiService apiService
+@using GymLogger.Shared.Models
+
+<h3>WorkoutLogs</h3>
+
+@if (workoutLogs == null || users == null || workouts == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <EditForm Model="@workoutLogsModel" OnValidSubmit="@HandleValidSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <InputSelect id="UserId" @bind-Value="workoutLogsModel.UserId">
+            @foreach (var user in users)
+            {
+                <option value="@user.Id">@user.Name</option>
+            }
+        </InputSelect>
+
+        <InputDate id="name" @bind-Value="workoutLogsModel.Date" />
+        <InputNumber id="name" @bind-Value="workoutLogsModel.Duration" />
+        <InputSelect id="WorkoutId" @bind-Value="workoutLogsModel.WorkoutId">
+            @foreach (var workout in workouts)
+            {
+                <option value="@workout.Id">@workout.Name</option>
+            }
+        </InputSelect>
+
+
+
+        <button type="submit">Submit</button>
+    </EditForm>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>UserId</th>
+                <th>Date</th>
+                <th>Duration</th>
+                <th>WorkoutId</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var workoutLog in workoutLogs)
+            {
+                <tr>
+                    <td>@workoutLog.Id</td>
+                    <td>@workoutLog.UserId</td>
+                    <td>@workoutLog.Date</td>
+                    <td>@workoutLog.Duration</td>
+                    <td>@workoutLog.WorkoutId</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private WorkoutLog workoutLogsModel = new();
+    List<WorkoutLog>? workoutLogs;
+    List<User>? users;
+    List<Workout>? workouts;
+
+    protected override async Task OnInitializedAsync()
+    {
+        workoutLogs = await apiService.GetWorkoutLogsAsync();
+        users = await apiService.GetUsersAsync();
+        workouts = await apiService.GetWorkoutsAsync();
+    }
+
+    private async void HandleValidSubmit()
+    {
+        await apiService.CreateWorkoutLogAsync(workoutLogsModel);
+    }
+}

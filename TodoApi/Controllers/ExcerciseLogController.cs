@@ -12,11 +12,11 @@ namespace GymLogger.Controllers;
 
 [Route("api/ExcerciseLogs")]
 [ApiController]
-public class LogController : ControllerBase
+public class ExcerciseLogController : ControllerBase
 {
     private readonly GymLoggerContext _context;
 
-    public LogController(GymLoggerContext context)
+    public ExcerciseLogController(GymLoggerContext context)
     {
         _context = context;
     }

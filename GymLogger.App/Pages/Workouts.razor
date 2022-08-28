@@ -1,0 +1,55 @@
+﻿@page "/workouts"
+@inject Data.ApiService apiService
+@using GymLogger.Shared.Models
+
+<h3>Workouts</h3>
+
+@if (workouts == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <EditForm Model="@workoutModel" OnValidSubmit="@HandleValidSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <InputText id="name" @bind-Value="workoutModel.Name" />
+
+
+        <button type="submit">Submit</button>
+    </EditForm>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var workout in workouts)
+            {
+                <tr>
+                    <td>@workout.Id</td>
+                    <td>@workout.Name</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private Workout workoutModel = new();
+    List<Workout>? workouts;
+
+    protected override async Task OnInitializedAsync()
+    {
+        workouts = await apiService.GetWorkoutsAsync();
+    }
+
+    private async void HandleValidSubmit()
+    {
+        await apiService.CreateWorkoutAsync(workoutModel);
+    }
+}

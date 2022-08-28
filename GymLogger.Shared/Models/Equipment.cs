@@ -3,7 +3,7 @@
 public class Equipment
 {
     public long Id { get; set; }
-    public string Name { get; set; }
+    public string Name { get; set; } = String.Empty;
     public int BarbellMin { get; set; }
     public int BarbellMax { get; set; }
     public int BarbellIncrements { get; set; }

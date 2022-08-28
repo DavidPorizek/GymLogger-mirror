@@ -2,7 +2,7 @@
 @inject Data.ApiService apiService
 @using GymLogger.Shared.Models
 
-<h3>Equipment</h3>
+<h3>Equipments</h3>
 
 @if (equipments == null)
 {
@@ -15,6 +15,13 @@ else
         <ValidationSummary />
 
         <InputText id="name" @bind-Value="equipmentModel.Name" />
+        <InputNumber id="barbellmin" @bind-Value="equipmentModel.BarbellMin" />
+        <InputNumber id="BarbellMax" @bind-Value="equipmentModel.BarbellMax" />
+        <InputNumber id="BarbellIncrements" @bind-Value="equipmentModel.BarbellIncrements" />
+        <InputNumber id="DumbbellMin" @bind-Value="equipmentModel.DumbbellMin" />
+        <InputNumber id="DumbbellMax" @bind-Value="equipmentModel.DumbbellMax" />
+        <InputNumber id="DumbbellIncrements" @bind-Value="equipmentModel.DumbbellIncrements" />
+
 
         <button type="submit">Submit</button>
     </EditForm>
@@ -52,15 +59,15 @@ else
 
 @code {
     private Equipment equipmentModel = new();
-    List<Equipment> equipments;
+    List<Equipment>? equipments = new();
 
     protected override async Task OnInitializedAsync()
     {
         equipments = await apiService.GetEquipmentsAsync();
     }
 
-    private void HandleValidSubmit()
+    private async void HandleValidSubmit()
     {
-        apiService.CreateEquipmentsAsync(equipmentModel);
+        await apiService.CreateEquipmentAsync(equipmentModel);
     }
 }

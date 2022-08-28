@@ -1,0 +1,81 @@
+﻿@page "/excerciselogs"
+@inject Data.ApiService apiService
+@using GymLogger.Shared.Models
+
+<h3>ExcerciseLogs</h3>
+
+@if (excerciseLogs == null || excercises == null || workoutLogs == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <EditForm Model="@excerciseLogsModel" OnValidSubmit="@HandleValidSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <InputSelect id="ExcerciseId" @bind-Value="excerciseLogsModel.ExcerciseId">
+            @foreach (var excercise in excercises)
+            {
+                <option value="@excercise.Id">@excercise.Name</option>
+            }
+        </InputSelect>
+        <InputNumber id="name" @bind-Value="excerciseLogsModel.Repetition" />
+        <InputNumber id="name" @bind-Value="excerciseLogsModel.Series" />
+        <InputNumber id="name" @bind-Value="excerciseLogsModel.Completion" />
+        <InputSelect id="WorkoutLogId" @bind-Value="excerciseLogsModel.WorkoutLogId">
+            @foreach (var workoutLog in workoutLogs)
+            {
+                <option value="@workoutLog.Id">@workoutLog.Date</option>
+            }
+        </InputSelect>
+
+
+        <button type="submit">Submit</button>
+    </EditForm>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>ExcerciseId</th>
+                <th>Repetition</th>
+                <th>Series</th>
+                <th>Completion</th>
+                <th>WorkoutLogId</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var excerciseLog in excerciseLogs)
+            {
+                <tr>
+                    <td>@excerciseLog.Id</td>
+                    <td>@excerciseLog.ExcerciseId</td>
+                    <td>@excerciseLog.Repetition</td>
+                    <td>@excerciseLog.Series</td>
+                    <td>@excerciseLog.Completion</td>
+                    <td>@excerciseLog.WorkoutLogId</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private ExcerciseLog excerciseLogsModel = new();
+    List<ExcerciseLog>? excerciseLogs;
+    List<Excercise>? excercises;
+    List<WorkoutLog>? workoutLogs;
+
+    protected override async Task OnInitializedAsync()
+    {
+        excerciseLogs = await apiService.GetExcerciseLogsAsync();
+        excercises = await apiService.GetExcercisesAsync();
+        workoutLogs = await apiService.GetWorkoutLogsAsync();
+    }
+
+    private async void HandleValidSubmit()
+    {
+        await apiService.CreateExcerciseLogAsync(excerciseLogsModel);
+    }
+}
