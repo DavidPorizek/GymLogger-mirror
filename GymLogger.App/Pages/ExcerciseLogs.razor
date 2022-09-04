@@ -14,16 +14,30 @@ else
         <DataAnnotationsValidator />
         <ValidationSummary />
 
-        <InputSelect id="ExcerciseId" @bind-Value="excerciseLogsModel.ExcerciseId">
+        <label for="excerciseid">Excercise ID</label>
+        <InputSelect id="excerciseid" @bind-Value="excerciseLogsModel.ExcerciseId">
             @foreach (var excercise in excercises)
             {
                 <option value="@excercise.Id">@excercise.Name</option>
             }
         </InputSelect>
-        <InputNumber id="name" @bind-Value="excerciseLogsModel.Repetition" />
-        <InputNumber id="name" @bind-Value="excerciseLogsModel.Series" />
-        <InputNumber id="name" @bind-Value="excerciseLogsModel.Completion" />
-        <InputSelect id="WorkoutLogId" @bind-Value="excerciseLogsModel.WorkoutLogId">
+
+        <label for="repetition">Repetitions</label>
+        <InputNumber id="repetition" @bind-Value="excerciseLogsModel.Repetition" />
+
+        <label for="series">Series</label>
+        <InputNumber id="series" @bind-Value="excerciseLogsModel.Series" />
+
+        <label for="completion">Completed?</label>
+        <InputSelect id="completion" @bind-Value="@excerciseLogsModel.Completion" >
+            @foreach (var completion in Enum.GetValues(typeof(Completion)))
+            {
+                <option value="@completion">@completion</option>
+            }
+        </InputSelect>
+
+        <label for="workoutlogid">Workout Log ID</label>
+        <InputSelect id="workoutlogid" @bind-Value="excerciseLogsModel.WorkoutLogId">
             @foreach (var workoutLog in workoutLogs)
             {
                 <option value="@workoutLog.Id">@workoutLog.Date</option>

@@ -14,8 +14,11 @@ else
         <DataAnnotationsValidator />
         <ValidationSummary />
 
+        <label for="name">Name</label>
         <InputText id="name" @bind-Value="excerciseModel.Name" />
-        <InputText id="name" @bind-Value="excerciseModel.BodyPart" />
+
+        <label for="bodypart">Body Part</label>
+        <InputText id="bodypart" @bind-Value="excerciseModel.BodyPart" />
 
 
         <button type="submit">Submit</button>

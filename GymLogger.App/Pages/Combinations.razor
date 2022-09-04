@@ -14,19 +14,24 @@ else
         <DataAnnotationsValidator />
         <ValidationSummary />
 
-        <InputSelect id="WorkoutId" @bind-Value="combinationModel.WorkoutId">
+        <label for="workoutid">Workout ID</label>
+        <InputSelect id="workoutid" @bind-Value="combinationModel.WorkoutId">
             @foreach (var workout in workouts)
             {
                 <option value="@workout.Id">@workout.Name</option>
             }
         </InputSelect>
-        <InputSelect id="EquipmentId" @bind-Value="combinationModel.EquipmentId">
+
+        <label for="equipmentid">Equipment ID</label>
+        <InputSelect id="equipmentid" @bind-Value="combinationModel.EquipmentId">
             @foreach (var equipment in equipments)
             {
                 <option value="@equipment.Id">@equipment.Name</option>
             }
         </InputSelect>
-        <InputSelect id="ExcerciseId" @bind-Value="combinationModel.ExcerciseId">
+
+        <label for="excerciseid">Excercise ID</label>
+        <InputSelect id="excerciseid" @bind-Value="combinationModel.ExcerciseId">
             @foreach (var excercise in excercises)
             {
                 <option value="@excercise.Id">@excercise.Name</option>

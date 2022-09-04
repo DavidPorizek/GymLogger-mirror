@@ -14,8 +14,11 @@ else
         <DataAnnotationsValidator />
         <ValidationSummary />
 
+        <label for="name">Name</label>
         <InputText id="name" @bind-Value="userModel.Name" />
-        <InputSelect id="ConfigurationId" @bind-Value="userModel.ConfigurationId">
+
+        <label for="configurationid">Configuration ID</label>
+        <InputSelect id="configurationid" @bind-Value="userModel.ConfigurationId">
             @foreach (var configuration in configurations)
             {
                 <option value="@configuration.Id">@configuration.Id</option>

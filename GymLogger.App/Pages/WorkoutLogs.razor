@@ -14,16 +14,22 @@ else
         <DataAnnotationsValidator />
         <ValidationSummary />
 
-        <InputSelect id="UserId" @bind-Value="workoutLogsModel.UserId">
+        <label for="userid">User ID</label>
+        <InputSelect id="userid" @bind-Value="workoutLogsModel.UserId">
             @foreach (var user in users)
             {
                 <option value="@user.Id">@user.Name</option>
             }
         </InputSelect>
 
-        <InputDate id="name" @bind-Value="workoutLogsModel.Date" />
-        <InputNumber id="name" @bind-Value="workoutLogsModel.Duration" />
-        <InputSelect id="WorkoutId" @bind-Value="workoutLogsModel.WorkoutId">
+        <label for="date">Date</label>
+        <InputDate id="date" @bind-Value="workoutLogsModel.Date" />
+
+        <label for="duration">Duration</label>
+        <InputNumber id="duration" @bind-Value="workoutLogsModel.Duration" />
+
+        <label for="workoutid">Workout ID</label>
+        <InputSelect id="workoutid" @bind-Value="workoutLogsModel.WorkoutId">
             @foreach (var workout in workouts)
             {
                 <option value="@workout.Id">@workout.Name</option>

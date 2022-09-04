@@ -14,15 +14,32 @@ else
         <DataAnnotationsValidator />
         <ValidationSummary />
 
-        <InputCheckbox id="name" @bind-Value="configurationModel.IncrementAutomatically" />
-        <InputCheckbox id="barbellmin" @bind-Value="configurationModel.DeloadAutomatically" />
-        <InputCheckbox id="BarbellMax" @bind-Value="configurationModel.IncrementWholeWorkout" />
-        <InputCheckbox id="BarbellIncrements" @bind-Value="configurationModel.DeloadWholeWorkout" />
-        <InputCheckbox id="DumbbellMin" @bind-Value="configurationModel.IncrementByPercentage" />
-        <InputCheckbox id="DumbbellMax" @bind-Value="configurationModel.DeloadByPercentage" />
-        <InputNumber id="DumbbellIncrements" @bind-Value="configurationModel.DeloadRatio" />
-        <InputNumber id="DumbbellIncrements" @bind-Value="configurationModel.IncrementRatio" />
-        <InputSelect id="WorkoutId" @bind-Value="configurationModel.WorkoutId" >
+        <label for="incrementautomatically">Increment Weight Automatically</label>
+        <InputCheckbox id="incrementautomatically" @bind-Value="configurationModel.IncrementAutomatically" />
+
+        <label for="deloadautomatically">Deload Weight Automatically</label>
+        <InputCheckbox id="deloadautomatically" @bind-Value="configurationModel.DeloadAutomatically" />
+
+        <label for="incrementwholeworkout">Increment Whole Workout?</label>
+        <InputCheckbox id="incrementwholeworkout" @bind-Value="configurationModel.IncrementWholeWorkout" />
+
+        <label for="deloadwholeworkout">Deload Whole Workout?</label>
+        <InputCheckbox id="deloadwholeworkout" @bind-Value="configurationModel.DeloadWholeWorkout" />
+
+        <label for="incrementbypercentage">Increment Weight by Percentage?</label>
+        <InputCheckbox id="incrementbypercentage" @bind-Value="configurationModel.IncrementByPercentage" />
+
+        <label for="deloadbypercentage">Deload Weight by Percentage?</label>
+        <InputCheckbox id="deloadbypercentage" @bind-Value="configurationModel.DeloadByPercentage" />
+
+        <label for="deloadratio">Weight Deload Ratio</label>
+        <InputNumber id="deloadratio" @bind-Value="configurationModel.DeloadRatio" />
+
+        <label for="incrementratio">Weight Increment Ratio</label>
+        <InputNumber id="incrementratio" @bind-Value="configurationModel.IncrementRatio" />
+
+        <label for="workoutid">Workout ID</label>
+        <InputSelect id="workoutid" @bind-Value="configurationModel.WorkoutId" >
             @foreach (var workout in workouts)
             {
                 <option value="@workout.Id">@workout.Name</option>

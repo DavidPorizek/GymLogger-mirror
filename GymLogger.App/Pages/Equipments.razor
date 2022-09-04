@@ -14,13 +14,26 @@ else
         <DataAnnotationsValidator />
         <ValidationSummary />
 
+        <label for="name">Name</label>
         <InputText id="name" @bind-Value="equipmentModel.Name" />
+
+        <label for="barbellmin">Barbell Minimum</label>
         <InputNumber id="barbellmin" @bind-Value="equipmentModel.BarbellMin" />
-        <InputNumber id="BarbellMax" @bind-Value="equipmentModel.BarbellMax" />
-        <InputNumber id="BarbellIncrements" @bind-Value="equipmentModel.BarbellIncrements" />
-        <InputNumber id="DumbbellMin" @bind-Value="equipmentModel.DumbbellMin" />
-        <InputNumber id="DumbbellMax" @bind-Value="equipmentModel.DumbbellMax" />
-        <InputNumber id="DumbbellIncrements" @bind-Value="equipmentModel.DumbbellIncrements" />
+
+        <label for="barbellmax">Barbell Maximum</label>
+        <InputNumber id="barbellmax" @bind-Value="equipmentModel.BarbellMax" />
+
+        <label for="barbellincrements">Barbell Increments</label>
+        <InputNumber id="barbellincrements" @bind-Value="equipmentModel.BarbellIncrements" />
+
+        <label for="dumbbellmin">Dumbbell Minimum</label>
+        <InputNumber id="dumbbellmin" @bind-Value="equipmentModel.DumbbellMin" />
+
+        <label for="dumbbellmax">Dumbbell Maximum</label>
+        <InputNumber id="dumbbellmax" @bind-Value="equipmentModel.DumbbellMax" />
+
+        <label for="dumbbellincrements">Dumbbell Increments</label>
+        <InputNumber id="dumbbellincrements" @bind-Value="equipmentModel.DumbbellIncrements" />
 
 
         <button type="submit">Submit</button>
