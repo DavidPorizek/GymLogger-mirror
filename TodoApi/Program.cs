@@ -18,7 +18,7 @@ builder.Services.AddControllers().ConfigureApiBehaviorOptions(options =>
 });
 
 builder.Services.AddDbContext<GymLoggerContext>(opt =>
-    // opt.UseSqlServer(builder.Configuration.GetConnectionString("GymLoggerContext")));
+    //opt.UseSqlServer(builder.Configuration.GetConnectionString("GymLoggerContext")));
     opt.UseInMemoryDatabase("GymLoggerContext"));
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
