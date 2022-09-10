@@ -4,7 +4,7 @@
 
 <h3>Workouts</h3>
 
-@if (workouts == null)
+@if (workouts == null || users == null || configurations == null)
 {
     <p><em>Loading...</em></p>
 }
@@ -17,6 +17,21 @@ else
         <label for="name">Name</label>
         <InputText id="name" @bind-Value="workoutModel.Name" />
 
+        <label for="userid">User ID</label>
+        <InputSelect id="userid" @bind-Value="workoutModel.UserId">
+            @foreach (var user in users)
+            {
+                <option value="@user.Id">@user.Name</option>
+            }
+        </InputSelect>
+
+        <label for="configurationid">Configuration ID</label>
+        <InputSelect id="configurationid" @bind-Value="workoutModel.ConfigurationId">
+            @foreach (var configuration in configurations)
+            {
+                <option value="@configuration.Id">@configuration.Id</option>
+            }
+        </InputSelect>
 
         <button type="submit">Submit</button>
     </EditForm>
@@ -26,6 +41,8 @@ else
             <tr>
                 <th>ID</th>
                 <th>Name</th>
+                <th>User ID</th>
+                <th>Configuration ID</th>
             </tr>
         </thead>
         <tbody>
@@ -34,6 +51,8 @@ else
                 <tr>
                     <td>@workout.Id</td>
                     <td>@workout.Name</td>
+                    <td>@workout.UserId</td>
+                    <td>@workout.ConfigurationId</td>
                 </tr>
             }
         </tbody>
@@ -43,10 +62,14 @@ else
 @code {
     private Workout workoutModel = new();
     List<Workout>? workouts;
+    List<User>? users;
+    List<Configuration>? configurations;
 
     protected override async Task OnInitializedAsync()
     {
         workouts = await apiService.GetWorkoutsAsync();
+        users = await apiService.GetUsersAsync();
+        configurations = await apiService.GetConfigurationsAsync();
     }
 
     private async void HandleValidSubmit()

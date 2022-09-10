@@ -30,7 +30,9 @@ public class ExcerciseController : ControllerBase
             return NotFound();
         }
 
-        return await _context.Excercises.ToListAsync();
+        return await _context.Excercises
+            .Include(x => x.User)
+            .ToListAsync();
     }
 
     // GET: api/Excercises/5
@@ -41,7 +43,10 @@ public class ExcerciseController : ControllerBase
         {
             return NotFound();
         }
-        var Excercise = await _context.Excercises.FindAsync(id);
+
+        var Excercise = await _context.Excercises
+            .Include(x => x.User)
+            .SingleOrDefaultAsync(x => x.Id == id);
 
         if (Excercise == null)
         {
@@ -69,6 +74,7 @@ public class ExcerciseController : ControllerBase
 
         updateExcercise.Name = Excercise.Name;
         updateExcercise.BodyPart = Excercise.BodyPart;
+        updateExcercise.UserId = Excercise.UserId;
 
         try
         {
@@ -102,11 +108,14 @@ public class ExcerciseController : ControllerBase
         var createdExcercise = new Excercise
         {
             Name = Excercise.Name,
-            BodyPart = Excercise.BodyPart
+            BodyPart = Excercise.BodyPart,
+            UserId = Excercise.UserId
         };
 
         _context.Excercises.Add(createdExcercise);
         await _context.SaveChangesAsync();
+        
+        _context.Entry(createdExcercise).Reference(x => x.User).Load();
 
         return CreatedAtAction(nameof(GetExcercise), new { id = createdExcercise.Id }, createdExcercise);
     }

@@ -214,39 +214,6 @@ namespace GymLogger.App.Data
         }
 
         #endregion
-        #region Combination
-
-        public async Task<List<Combination>?> GetCombinationsAsync()
-        {
-            var response = await _httpClient.GetAsync("api/combinations");
-            response.EnsureSuccessStatusCode();
-
-            var responseContent = await response.Content.ReadAsStreamAsync();
-            return await responseContent.DeserializeAsync<List<Combination>>();
-        }
-
-        public async Task<Combination?> GetCombinationByIdAsync(long id)
-        {
-            var response = await _httpClient.GetAsync($"api/combinations/{id}");
-            response.EnsureSuccessStatusCode();
-
-            using var responseContent = await response.Content.ReadAsStreamAsync();
-            return await responseContent.DeserializeAsync<Combination>();
-        }
-
-        public async Task<Combination?> CreateCombinationAsync(Combination combination)
-        {
-            var serialized = JsonSerializer.Serialize<Combination>(combination);
-            StringContent content = new StringContent(serialized, Encoding.UTF8, "application/json");
-
-            var response = await _httpClient.PostAsync("api/combinations", content);
-            response.EnsureSuccessStatusCode();
-
-            using var responseContent = await response.Content.ReadAsStreamAsync();
-            return await responseContent.DeserializeAsync<Combination>();
-        }
-
-        #endregion
         #region User
 
         public async Task<List<User>?> GetUsersAsync()

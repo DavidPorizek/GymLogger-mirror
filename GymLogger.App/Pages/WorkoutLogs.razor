@@ -4,7 +4,7 @@
 
 <h3>WorkoutLogs</h3>
 
-@if (workoutLogs == null || users == null || workouts == null)
+@if (workoutLogs == null || workouts == null)
 {
     <p><em>Loading...</em></p>
 }
@@ -13,14 +13,6 @@ else
     <EditForm Model="@workoutLogsModel" OnValidSubmit="@HandleValidSubmit">
         <DataAnnotationsValidator />
         <ValidationSummary />
-
-        <label for="userid">User ID</label>
-        <InputSelect id="userid" @bind-Value="workoutLogsModel.UserId">
-            @foreach (var user in users)
-            {
-                <option value="@user.Id">@user.Name</option>
-            }
-        </InputSelect>
 
         <label for="date">Date</label>
         <InputDate id="date" @bind-Value="workoutLogsModel.Date" />
@@ -45,7 +37,6 @@ else
         <thead>
             <tr>
                 <th>ID</th>
-                <th>UserId</th>
                 <th>Date</th>
                 <th>Duration</th>
                 <th>WorkoutId</th>
@@ -56,7 +47,6 @@ else
             {
                 <tr>
                     <td>@workoutLog.Id</td>
-                    <td>@workoutLog.UserId</td>
                     <td>@workoutLog.Date</td>
                     <td>@workoutLog.Duration</td>
                     <td>@workoutLog.WorkoutId</td>
@@ -69,13 +59,11 @@ else
 @code {
     private WorkoutLog workoutLogsModel = new();
     List<WorkoutLog>? workoutLogs;
-    List<User>? users;
     List<Workout>? workouts;
 
     protected override async Task OnInitializedAsync()
     {
         workoutLogs = await apiService.GetWorkoutLogsAsync();
-        users = await apiService.GetUsersAsync();
         workouts = await apiService.GetWorkoutsAsync();
     }
 

@@ -4,7 +4,7 @@
 
 <h3>Excercises</h3>
 
-@if (excercises == null)
+@if (excercises == null || users == null)
 {
     <p><em>Loading...</em></p>
 }
@@ -20,6 +20,14 @@ else
         <label for="bodypart">Body Part</label>
         <InputText id="bodypart" @bind-Value="excerciseModel.BodyPart" />
 
+        <label for="userid">User ID</label>
+        <InputSelect id="userid" @bind-Value="excerciseModel.UserId">
+            @foreach (var user in users)
+            {
+                <option value="@user.Id">@user.Name</option>
+            }
+        </InputSelect>
+
 
         <button type="submit">Submit</button>
     </EditForm>
@@ -30,6 +38,7 @@ else
                 <th>ID</th>
                 <th>Name</th>
                 <th>BodyPart</th>
+                <th>User ID</th>
             </tr>
         </thead>
         <tbody>
@@ -39,6 +48,7 @@ else
                     <td>@excercise.Id</td>
                     <td>@excercise.Name</td>
                     <td>@excercise.BodyPart</td>
+                    <td>@excercise.UserId</td>
                 </tr>
             }
         </tbody>
@@ -48,10 +58,12 @@ else
 @code {
     private Excercise excerciseModel = new();
     List<Excercise>? excercises;
+    List<User>? users;
 
     protected override async Task OnInitializedAsync()
     {
         excercises = await apiService.GetExcercisesAsync();
+        users = await apiService.GetUsersAsync();
     }
 
     private async void HandleValidSubmit()

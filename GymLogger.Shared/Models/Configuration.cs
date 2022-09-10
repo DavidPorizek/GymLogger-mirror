@@ -13,6 +13,4 @@ public class Configuration
     public bool DeloadByPercentage { get; set; } = true;
     public int DeloadRatio { get; set; }
     public int IncrementRatio { get; set; }
-    public long WorkoutId { get; set; }
-    public virtual Workout? Workout { get; set; }
 }

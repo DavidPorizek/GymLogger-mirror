@@ -4,7 +4,7 @@
 
 <h3>Configurations</h3>
 
-@if (workouts == null || configurations == null)
+@if (configurations == null)
 {
     <p><em>Loading...</em></p>
 }
@@ -38,15 +38,6 @@ else
         <label for="incrementratio">Weight Increment Ratio</label>
         <InputNumber id="incrementratio" @bind-Value="configurationModel.IncrementRatio" />
 
-        <label for="workoutid">Workout ID</label>
-        <InputSelect id="workoutid" @bind-Value="configurationModel.WorkoutId" >
-            @foreach (var workout in workouts)
-            {
-                <option value="@workout.Id">@workout.Name</option>
-            }
-        </InputSelect>
-
-
         <button type="submit">Submit</button>
     </EditForm>
 
@@ -77,7 +68,6 @@ else
                     <td>@configuration.DeloadByPercentage </td>
                     <td>@configuration.DeloadRatio </td>
                     <td>@configuration.IncrementRatio  </td>
-                    <td>@configuration.WorkoutId  </td>
                 </tr>
             }
         </tbody>
@@ -87,12 +77,10 @@ else
 @code {
     private Configuration configurationModel = new();
     List<Configuration>? configurations;
-    List<Workout>? workouts;
 
     protected override async Task OnInitializedAsync()
     {
         configurations = await apiService.GetConfigurationsAsync();
-        workouts = await apiService.GetWorkoutsAsync();
     }
 
     private async void HandleValidSubmit()

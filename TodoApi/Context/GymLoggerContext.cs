@@ -18,7 +18,6 @@ public class GymLoggerContext : DbContext
     public DbSet<Configuration> Configurations => Set<Configuration>();
     public DbSet<Equipment> Equipments => Set<Equipment>();
     public DbSet<Excercise> Excercises => Set<Excercise>();
-    public DbSet<Combination> Combinations => Set<Combination>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

@@ -30,7 +30,10 @@ public class WorkoutController : ControllerBase
             return NotFound();
         }
 
-        return await _context.Workouts.ToListAsync();
+        return await _context.Workouts
+            .Include(x => x.User)
+            .Include(x => x.Configuration)
+            .ToListAsync();
     }
 
     // GET: api/Workouts/5
@@ -41,7 +44,10 @@ public class WorkoutController : ControllerBase
         {
             return NotFound();
         }
-        var Workout = await _context.Workouts.FindAsync(id);
+        var Workout = await _context.Workouts
+            .Include(x => x.User)
+            .Include(x => x.Configuration)
+            .SingleOrDefaultAsync(x => x.Id == id);
 
         if (Workout == null)
         {
@@ -68,6 +74,8 @@ public class WorkoutController : ControllerBase
         }
 
         updateWorkout.Name = Workout.Name;
+        updateWorkout.UserId = Workout.UserId;
+        updateWorkout.ConfigurationId = Workout.ConfigurationId;
 
         try
         {
@@ -100,11 +108,16 @@ public class WorkoutController : ControllerBase
 
         var createdWorkout = new Workout
         {
-            Name = Workout.Name
+            Name = Workout.Name,
+            UserId = Workout.UserId,
+            ConfigurationId = Workout.ConfigurationId
         };
 
         _context.Workouts.Add(createdWorkout);
         await _context.SaveChangesAsync();
+
+        _context.Entry(createdWorkout).Reference(x => x.User).Load();
+        _context.Entry(createdWorkout).Reference(x => x.Configuration).Load();
 
         return CreatedAtAction(nameof(GetWorkout), new { id = createdWorkout.Id }, createdWorkout);
     }

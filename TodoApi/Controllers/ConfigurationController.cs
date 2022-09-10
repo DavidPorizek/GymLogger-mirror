@@ -31,7 +31,6 @@ public class ConfigurationController : ControllerBase
         }
 
         return await _context.Configurations
-            .Include(x => x.Workout)
             .ToListAsync();
     }
 
@@ -44,7 +43,6 @@ public class ConfigurationController : ControllerBase
             return NotFound();
         }
         var Configuration = await _context.Configurations
-            .Include(x => x.Workout)
             .SingleOrDefaultAsync(x => x.Id == id);
 
         if (Configuration == null)
@@ -79,7 +77,6 @@ public class ConfigurationController : ControllerBase
         updateConfiguration.DeloadByPercentage = Configuration.DeloadByPercentage;
         updateConfiguration.DeloadRatio = Configuration.DeloadRatio;
         updateConfiguration.IncrementRatio = Configuration.IncrementRatio;
-        updateConfiguration.WorkoutId = Configuration.WorkoutId;
 
         try
         {
@@ -120,13 +117,10 @@ public class ConfigurationController : ControllerBase
             DeloadByPercentage = Configuration.DeloadByPercentage,
             DeloadRatio = Configuration.DeloadRatio,
             IncrementRatio = Configuration.IncrementRatio,
-            WorkoutId = Configuration.WorkoutId
         };
 
         _context.Configurations.Add(createdConfiguration);
         await _context.SaveChangesAsync();
-
-        _context.Entry(createdConfiguration).Reference(x => x.Workout).Load();
 
         return CreatedAtAction(nameof(GetConfiguration), new { id = createdConfiguration.Id }, createdConfiguration);
     }
