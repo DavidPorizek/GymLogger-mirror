@@ -1,6 +1,6 @@
 .vs/
-TodoApi/bin/
-TodoApi/obj/
+/GymLogger.Api/bin/
+/GymLogger.Api/obj/
 /GymLogger.Shared/bin/Debug/net6.0
 /GymLogger.Shared/obj
 /GymLogger.App/bin/Debug/net6.0
