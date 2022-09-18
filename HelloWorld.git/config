@@ -1,0 +1,11 @@
+[core]
+	repositoryformatversion = 0
+	filemode = false
+	bare = true
+	symlinks = false
+	ignorecase = true
+[remote "origin"]
+	url = https://davidporizek@dev.azure.com/davidporizek/HelloWorld/_git/HelloWorld
+	fetch = +refs/*:refs/*
+	mirror = true
+	pushurl = https://github.com/DavidPorizek/GymLogger-mirror.git
