@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using GymLogger.Shared.Models;
 using GymLogger.Context;
 
-namespace GymLogger.Controllers;
+namespace GymLogger.API.Controllers;
 
 [Route("api/Configurations")]
 [ApiController]
