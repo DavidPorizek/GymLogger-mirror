@@ -6,3 +6,6 @@
 /GymLogger.App/bin/Debug/net6.0
 /GymLogger.App/obj/Debug/net6.0
 /GymLogger.App/obj
+/packages
+/GymLogger.UnitTests/bin/Debug/net6.0
+/GymLogger.UnitTests/obj

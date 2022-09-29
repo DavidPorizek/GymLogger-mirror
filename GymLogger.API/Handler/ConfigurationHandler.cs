@@ -1,5 +1,4 @@
 ﻿using GymLogger.Context;
-using GymLogger.Shared.DTOs;
 using GymLogger.Shared.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -20,9 +19,9 @@ namespace GymLogger.API.Handler
         public async Task<List<Configuration>> Handle(GetConfigurationsQuery query,
             CancellationToken cancellationToken)
         {
-            if (_context.Configurations == null)
+            if (_context == null)
             {
-                //return NotFound();
+                throw new ArgumentNullException(nameof(_context));
             }
 
             return await _context.Configurations.ToListAsync();
